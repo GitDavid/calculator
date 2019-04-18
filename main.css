@@ -1,0 +1,6 @@
+#result, #display {
+    display: block;
+    border: solid 1px;
+    height: 20px;
+    width: 200px;
+}
