@@ -40,7 +40,7 @@ Array.prototype.forEach.call(numInputButtons, (button) => {
             display.textContent = "";
         display.textContent += button.textContent;
         isStart = false;
-        if (displayEndsWith == "op")
+        if (displayEndsWith != ".")
             displayEndsWith = "num";
     })
 })
@@ -57,13 +57,17 @@ Array.prototype.forEach.call(opInputButtons, (button) => {
 })
 
 point.addEventListener("click", () => {
-    if (displayEndsWith == "op") {
-        display.textContent += "0.";
-    } else if (displayEndsWith != ".") {
-        display.textContent += ".";
+    if (isStart || displayEndsWith == "op" || displayEndsWith == "num") {
+        if (isStart) {
+            display.textContent = "0.";
+        } else if (displayEndsWith == "op") {
+            display.textContent += "0.";
+        } else if (displayEndsWith == "num") {
+            display.textContent += ".";
+        }
+        isStart = false;
+        displayEndsWith = ".";
     }
-    isStart = false;
-    displayEndsWith = ".";
 })
 
 clear.addEventListener("click", () => {
