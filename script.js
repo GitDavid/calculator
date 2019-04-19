@@ -36,12 +36,16 @@ let displayEndsWith = "0";
 
 Array.prototype.forEach.call(numInputButtons, (button) => {
     button.addEventListener("click", () => {
-        if (isStart)
-            display.textContent = "";
-        display.textContent += button.textContent;
-        isStart = false;
-        if (displayEndsWith != ".")
-            displayEndsWith = "num";
+        if (displayEndsWith == "0" && button.textContent == "0") {
+            // do nothing
+        } else {
+            if (isStart)
+                display.textContent = "";
+            display.textContent += button.textContent;
+            if (displayEndsWith != "." || isStart)
+                displayEndsWith = "num";
+            isStart = false;
+        }
     })
 })
 
