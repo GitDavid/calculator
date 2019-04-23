@@ -1,6 +1,15 @@
+body {
+    width: 300px;
+    margin: auto;
+}
+
 #result, #display {
     display: block;
     border: solid 1px;
-    height: 20px;
-    width: 200px;
+    height: 40px;
+    width: 220px;
+    text-align: right;
+    overflow: hidden;
+    direction: rtl;
+
 }
