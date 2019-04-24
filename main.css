@@ -10,6 +10,6 @@ body {
     width: 220px;
     text-align: right;
     overflow: hidden;
-    direction: rtl;
+    direction: ltr;
 
 }

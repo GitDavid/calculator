@@ -28,6 +28,7 @@ const numInputButtons = document.getElementsByClassName("numinput");
 const display = document.getElementById("display");
 const result = document.getElementById("result");
 const clear = document.getElementById("clear");
+const del = document.getElementById("del");
 const calculate = document.getElementById("calculate");
 const point = document.getElementById("point");
 
@@ -81,17 +82,38 @@ clear.addEventListener("click", () => {
     isStart = true;
 })
 
+del.addEventListener("click", () => {
+    if (display.textContent.length == 1) {
+        result.textContent = "0";
+        display.textContent = "0";
+        displayEndsWith = "0";
+        isStart = true;
+    } else {
+        if (display.textContent.slice(-1) == " ") {
+            display.textContent = display.textContent.slice(0, -3);
+        } else {
+            if (display.textContent.slice(-1) == ".")
+                displayEndsWith = "num";
+            display.textContent = display.textContent.slice(0, -1);
+        }
+    }
+})
+
 calculate.addEventListener("click", () => {
     const displayInput = display.textContent.split(" ");
     const operators = ["×", "÷", "+", "-"];
-    for (let i = 0; i < operators.length; i++) {
-        const op = operators[i];
-        while (displayInput.includes(op)) {
-            const opIdx = displayInput.indexOf(op);
-            const opResult = operate(displayInput[opIdx - 1], op, displayInput[opIdx + 1]);
-            displayInput.splice(opIdx - 1, 3, opResult);
+    if (displayInput[displayInput.length - 1] == "") {
+        result.textContent = "ERROR";
+    } else {
+        for (let i = 0; i < operators.length; i++) {
+            const op = operators[i];
+            while (displayInput.includes(op)) {
+                const opIdx = displayInput.indexOf(op);
+                const opResult = operate(displayInput[opIdx - 1], op, displayInput[opIdx + 1]);
+                displayInput.splice(opIdx - 1, 3, opResult);
+            }
         }
+        result.textContent = displayInput[0];
+        isStart = true;
     }
-    result.textContent = displayInput[0];
-    isStart = true;
 })
