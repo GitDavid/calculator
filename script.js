@@ -35,33 +35,29 @@ const point = document.getElementById("point");
 let isStart = true;
 let displayEndsWith = "0";
 
-Array.prototype.forEach.call(numInputButtons, (button) => {
-    button.addEventListener("click", () => {
-        if (displayEndsWith == "0" && button.textContent == "0") {
-            // do nothing
-        } else {
-            if (isStart)
-                display.textContent = "";
-            display.textContent += button.textContent;
-            if (displayEndsWith != "." || isStart)
-                displayEndsWith = "num";
-            isStart = false;
-        }
-    })
-})
-
-Array.prototype.forEach.call(opInputButtons, (button) => {
-    button.addEventListener("click", () => {
+function enterNums() {
+    if (displayEndsWith == "0" && this.textContent == "0") {
+        // do nothing
+    } else {
         if (isStart)
-            display.textContent = result.textContent;
-        if (displayEndsWith != "op")
-            display.textContent += button.textContent;
+            display.textContent = "";
+        display.textContent += this.textContent;
+        if (displayEndsWith != "." || isStart)
+            displayEndsWith = "num";
         isStart = false;
-        displayEndsWith = "op"
-    })
-})
+    }
+}
 
-point.addEventListener("click", () => {
+function enterOperators(button) {
+    if (isStart)
+        display.textContent = result.textContent;
+    if (displayEndsWith != "op")
+        display.textContent += this.textContent;
+    isStart = false;
+    displayEndsWith = "op"
+}
+
+function enterPoint() {
     if (isStart || displayEndsWith == "op" || displayEndsWith == "num") {
         if (isStart) {
             display.textContent = "0.";
@@ -73,16 +69,16 @@ point.addEventListener("click", () => {
         isStart = false;
         displayEndsWith = ".";
     }
-})
+}
 
-clear.addEventListener("click", () => {
+function enterClear() {
     result.textContent = "0";
     display.textContent = "0";
     displayEndsWith = "0";
     isStart = true;
-})
+}
 
-del.addEventListener("click", () => {
+function enterDel() {
     if (display.textContent.length == 1) {
         result.textContent = "0";
         display.textContent = "0";
@@ -97,9 +93,9 @@ del.addEventListener("click", () => {
             display.textContent = display.textContent.slice(0, -1);
         }
     }
-})
+}
 
-calculate.addEventListener("click", () => {
+function enterCalculate() {
     const displayInput = display.textContent.split(" ");
     const operators = ["×", "÷", "+", "-"];
     if (displayInput[displayInput.length - 1] == "") {
@@ -116,4 +112,38 @@ calculate.addEventListener("click", () => {
         result.textContent = displayInput[0];
         isStart = true;
     }
-})
+}
+
+Array.prototype.forEach.call(numInputButtons, (button) => {
+    button.addEventListener("click", enterNums);
+});
+
+Array.prototype.forEach.call(opInputButtons, (button) => {
+    button.addEventListener("click", enterOperators);
+});
+
+point.addEventListener("click", enterPoint)
+clear.addEventListener("click", enterClear)
+del.addEventListener("click", enterDel)
+calculate.addEventListener("click", enterCalculate)
+
+window.addEventListener("keydown", function(e) {
+    const keyCode = e.keyCode
+    const keyButton = document.querySelector(`button[key-code="${keyCode}"]`);
+    if (!keyButton) return;
+    if (96 <= keyCode  && keyCode <= 105) {
+        enterNums.call(keyButton); // how to pass context of key to the functions defined above??
+    } else if ([106, 107, 109, 111].indexOf(keyCode) != -1) {
+        enterOperators.call(keyButton);
+    } else if (keyCode == 110) {
+        enterPoint();
+    } else if (keyCode == 8) {
+        enterDel();
+    } else if (keyCode == 27) {
+        enterClear();
+    } else if (keyCode == 13) {
+        enterCalculate();
+    } else {
+        return;
+    }
+});
